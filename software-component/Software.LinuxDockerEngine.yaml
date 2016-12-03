@@ -1,0 +1,76 @@
+'@type': "SoftwareComponentType"
+createdDate: "2016-12-03T16:42:10.698Z"
+lastUpdated: "2016-12-03T16:55:14.513Z"
+id: "Software.LinuxDockerEngine"
+name: "Linux Docker Engine"
+description: "Installs the Docker engine from the latest copy available on get.docker.com.\
+  \ Enables the remote API on port 2375 (insecure)."
+publishStatus: "PUBLISHED"
+publishStatusName: "Published"
+schema:
+  fields:
+  - id: "host"
+    label: "Container"
+    description: ""
+    dataType:
+      type: "ref"
+      componentTypeId: "com.vmware.csp.iaas.blueprint.service"
+      classId: "Infrastructure.Machine.Schema"
+      label: "Machine"
+    state:
+      dependencies: []
+      facets:
+      - type: "mandatory"
+        value:
+          type: "constant"
+          value:
+            type: "boolean"
+            value: true
+      - type: "internal"
+        value:
+          type: "constantClause"
+          value:
+            type: "boolean"
+            value: true
+      - type: "visible"
+        value:
+          type: "constantClause"
+          value:
+            type: "boolean"
+            value: false
+    isMultiValued: false
+containerFieldId: "host"
+lifecycleTasks:
+- createdDate: "2016-12-03T16:42:10.699Z"
+  lastUpdated: "2016-12-03T19:11:22.484Z"
+  script:
+    scriptContent: "systemctl start docker\ndocker version"
+    isRebootAfter: false
+    scriptTypeId: "Bash"
+  taskDescriptorRef:
+    id: "START"
+    label: "Start"
+- createdDate: "2016-12-03T16:42:10.701Z"
+  lastUpdated: "2016-12-03T19:11:22.484Z"
+  script:
+    scriptContent: "yum update -y\ncurl -fsSL https://get.docker.com/ | sh\nsystemctl\
+      \ enable docker.service\nsystemctl start docker\n# Print the Docker client and\
+      \ engine version\ndocker version"
+    isRebootAfter: true
+    scriptTypeId: "Bash"
+  taskDescriptorRef:
+    id: "INSTALL"
+    label: "Install"
+- createdDate: "2016-12-03T16:42:10.700Z"
+  lastUpdated: "2016-12-03T19:11:22.484Z"
+  script:
+    scriptContent: "systemctl stop docker\nmkdir /etc/systemd/system/docker.service.d\n\
+      touch /etc/systemd/system/docker.conf\necho '[Service]' >> /etc/systemd/system/docker.service.d/docker.conf\n\
+      echo 'ExecStart=' >> /etc/systemd/system/docker.service.d/docker.conf\necho\
+      \ 'ExecStart=/usr/bin/dockerd -H tcp://0.0.0.0:2375 -H unix:///var/run/docker.sock'\
+      \ >> /etc/systemd/system/docker.service.d/docker.conf\nsystemctl daemon-reload"
+    isRebootAfter: false
+    scriptTypeId: "Bash"
+  taskDescriptorRef:
+    id: "CONFIGURE"
+    label: "Configure"

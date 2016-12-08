@@ -1,8 +1,8 @@
-name: "auto-generated-pkg-adc81aa9-37e2-4b57-8f38-50cffc4c986e"
+name: "auto-generated-pkg-b03cb611-97b3-4b5b-92b4-dfc868f2ddd1"
 productVersion: "7.2.0-SNAPSHOT"
 data:
 - locator: "software-component/Software.LinuxDockerEngine.yaml"
   name: "Linux Docker Engine"
   description: "Installs the Docker engine from the latest copy available on get.docker.com.\
     \ Enables the remote API on port 2375 (insecure)."
-exportTime: "2016-12-03T19:46:30.941Z"
+exportTime: "2016-12-08T17:14:18.955Z"
